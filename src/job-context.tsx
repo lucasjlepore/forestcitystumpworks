@@ -37,7 +37,11 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
-        return { ...newJob(), ...JSON.parse(saved) }
+        const parsed = JSON.parse(saved)
+        const stumps = Array.isArray(parsed?.stumps)
+          ? parsed.stumps.map((s: any) => ({ ...s, photos: s.photos ?? [] }))
+          : newJob().stumps
+        return { ...newJob(), ...parsed, stumps }
       } catch (err) {
         console.warn('Failed to parse saved job', err)
       }
@@ -46,7 +50,15 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
   })
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(job))
+    try {
+      const jobToPersist = {
+        ...job,
+        stumps: job.stumps.map(({ photos, ...rest }) => rest), // avoid huge photos in localStorage
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(jobToPersist))
+    } catch (err) {
+      console.warn('Persist job failed (likely quota exceeded)', err)
+    }
   }, [job])
 
   const value = useMemo(() => ({
