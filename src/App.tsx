@@ -56,7 +56,7 @@ function App() {
 
       <section id="quote-summary" className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 text-sm text-slate-200">
         <h3 className="font-semibold text-slate-50">Summary</h3>
-        <p className="text-slate-300">{job.stumps.length} stump(s) • Volume discount 20% off after first.</p>
+        <p className="text-slate-300">{job.stumps.length} stump(s)</p>
         {hasInvalidDiameters && <p className="text-red-400">Enter diameter for all stumps to get a valid quote.</p>}
         <div className="mt-2 space-y-1 text-slate-200">
           <p>Subtotal: {formatCurrency(totals.subtotal, settings.currency)}</p>

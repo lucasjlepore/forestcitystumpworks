@@ -3,9 +3,8 @@ import type { AppSettings, Job, QuoteTotals } from '../types'
 export const calculateQuote = (job: Job, settings: AppSettings): QuoteTotals => {
   let subtotal = 0
 
-  job.stumps.forEach((stump, index) => {
-    const discountFactor = index === 0 ? 1 : 0.8 // 20% off after first
-    const stumpPrice = stump.diameter * settings.baseRatePerInch * discountFactor
+  job.stumps.forEach((stump) => {
+    const stumpPrice = stump.diameter * settings.baseRatePerInch
     subtotal += stumpPrice
   })
 
