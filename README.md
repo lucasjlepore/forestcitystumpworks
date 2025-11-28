@@ -1,14 +1,22 @@
 # Forest City Stump Works
 
-Offline-ready (PWA-ready) stump grinding quote calculator tuned for London, Ontario pricing.
+Offline-ready (PWA) stump grinding quote tool hosted on GitHub Pages.
 
-## Features
-- Tailwind React SPA with localStorage persistence (no backend).
-- Pricing defaults: $5/inch base with HST 13%; volume discount 20% off after first stump.
-- Volume discount: 20% off each stump after the first.
-- Sticky footer totals + share/copy and PDF export (shows subtotal, HST, total).
-- Settings panel to adjust rates quickly (base rate + tax toggle).
-- PWA enabled (generateSW) with maskable icon (`public/icon.svg` + PNGs); Workbox runs in development mode to avoid terser issue—safe for prod, just unminified SW.
+## What it does
+- Single-page React app (Vite + Tailwind) with local (browser) storage.
+- Pricing: flat $5/inch per stump; HST toggle at 13%. No volume discounts.
+- Per-stump inputs: diameter, location note, up to 3 photos (kept in memory for sharing).
+- Live totals with Subtotal, HST, Total.
+- Sharing/export:
+  - Share/Copy text (formatted quote) with up to 3 compressed photos when Web Share supports files.
+  - Email quote button (formatted text; mailto can’t attach files).
+  - Export PDF of the on-screen summary.
+- PWA enabled (install to home screen).
+
+## Limits / notes
+- Photos are not persisted across reloads (to avoid localStorage quota issues); they stay in memory for the current session.
+- Mailto cannot attach photos; use Share on supported mobile browsers for photo attachments.
+- Hosted at: https://lucasjlepore.github.io/forestcitystumpworks/
 
 ## Develop
 ```bash
@@ -21,4 +29,5 @@ npm run dev
 npm run build
 ```
 
-> PWA plugin is configured but disabled for production until icon assets are added. Flip `disable: mode === 'production'` to `false` in `vite.config.ts` once icons are present.
+## Deploy (GitHub Pages via Actions)
+Push to `main`; the workflow publishes `dist/` to Pages. Base path is `/forestcitystumpworks/` for the project URL above.
