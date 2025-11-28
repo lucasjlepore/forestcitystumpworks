@@ -1,5 +1,3 @@
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
 import { useJob } from '../job-context'
 import { useSettings } from '../settings-context'
 import { calculateQuote, formatCurrency } from '../utils/calc'
@@ -53,7 +51,7 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
   const handleShare = async () => {
     const text = shareText()
     const files = await buildPhotoFiles(job.stumps)
-    const pdfFile = buildQuotePdfFile(job, settings, totals, signatureLines())
+    const pdfFile = await buildQuotePdfFile(job, settings, totals, signatureLines())
     if (pdfFile) files.unshift(pdfFile)
 
     if (files.length && navigator.canShare && navigator.canShare({ files })) {
@@ -84,6 +82,11 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
   const handlePdf = async () => {
     const el = document.getElementById('quote-summary')
     if (!el) return
+
+    const [html2canvas, { default: jsPDF }] = await Promise.all([
+      import('html2canvas').then((m) => m.default),
+      import('jspdf'),
+    ])
 
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' })
     const pageWidth = pdf.internal.pageSize.getWidth()
@@ -144,7 +147,8 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
 }
 
 
-const buildQuotePdfFile = (job: Job, settings: AppSettings, totals: QuoteTotals, sig: string[]): File => {
+const buildQuotePdfFile = async (job: Job, settings: AppSettings, totals: QuoteTotals, sig: string[]): Promise<File | null> => {
+  const { default: jsPDF } = await import('jspdf')
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' })
   const margin = 24
   const lineHeight = 16
