@@ -31,3 +31,9 @@ npm run build
 
 ## Deploy (GitHub Pages via Actions)
 Push to `main`; the workflow publishes `dist/` to Pages. Base path is `/forestcitystumpworks/` for the project URL above.
+
+## Optional: Email sending via Cloudflare Worker + AWS SES
+- Worker code: `worker/email-worker.js` (SES raw email with attachments)
+- Configure `worker/wrangler.toml` and set env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `SES_FROM` (verified in SES).
+- Deploy: `cd worker && wrangler deploy` (requires Cloudflare account + wrangler CLI).
+- Frontend would POST `{ to, subject, html, photos }` to the Worker URL; Worker sends HTML email with attachments through SES.

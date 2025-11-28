@@ -1,0 +1,8 @@
+name = "fcsw-email-worker"
+main = "email-worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# AWS_REGION = "us-east-1"
+# SES_FROM = "quotes@forestcitystumpworks.com"
+
