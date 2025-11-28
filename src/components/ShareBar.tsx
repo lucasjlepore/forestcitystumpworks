@@ -3,7 +3,7 @@ import jsPDF from 'jspdf'
 import { useJob } from '../job-context'
 import { useSettings } from '../settings-context'
 import { calculateQuote, formatCurrency } from '../utils/calc'
-import type { Photo } from '../types'
+import type { Photo, Job, AppSettings, QuoteTotals } from '../types'
 
 const MAX_SHARED_PHOTOS = 3
 const TARGET_MAX_DIM = 800
@@ -53,6 +53,8 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
   const handleShare = async () => {
     const text = shareText()
     const files = await buildPhotoFiles(job.stumps)
+    const pdfFile = buildQuotePdfFile(job, settings, totals, signatureLines())
+    if (pdfFile) files.unshift(pdfFile)
 
     if (files.length && navigator.canShare && navigator.canShare({ files })) {
       try {
@@ -139,6 +141,63 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
       </button>
     </div>
   )
+}
+
+
+const buildQuotePdfFile = (job: Job, settings: AppSettings, totals: QuoteTotals, sig: string[]): File => {
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' })
+  const margin = 24
+  const lineHeight = 16
+  let y = margin
+
+  pdf.setFontSize(16)
+  pdf.text(settings.companyName, margin, y)
+  y += lineHeight
+  pdf.setFontSize(12)
+  pdf.text('Stump Grinding Quote', margin, y)
+  y += lineHeight
+  pdf.text(`Date: ${new Date().toLocaleDateString()}`, margin, y)
+  y += lineHeight
+  pdf.text(`Quote ID: ${job.id.slice(0, 8)}`, margin, y)
+  y += lineHeight
+  if (job.clientName) { pdf.text(`Client: ${job.clientName}`, margin, y); y += lineHeight }
+  if (job.address) { pdf.text(`Address: ${job.address}`, margin, y); y += lineHeight }
+  y += lineHeight
+
+  // table header
+  pdf.setFont('helvetica', 'bold')
+  pdf.text('Stump', margin, y)
+  pdf.text('Diameter', margin + 80, y)
+  pdf.text('Location', margin + 160, y)
+  pdf.text('Photos', margin + 320, y)
+  pdf.setFont('helvetica', 'normal')
+  y += lineHeight
+  pdf.line(margin, y - 10, margin + 360, y - 10)
+
+  job.stumps.forEach((s, idx) => {
+    pdf.text(`Stump ${idx + 1}`, margin, y)
+    pdf.text(`${s.diameter}"`, margin + 80, y)
+    pdf.text(s.locationDescription || '-', margin + 160, y, { maxWidth: 150 })
+    pdf.text(`${s.photos?.length || 0}`, margin + 320, y)
+    y += lineHeight
+  })
+
+  y += lineHeight
+  pdf.text(`Subtotal: ${formatCurrency(totals.subtotal, settings.currency)}`, margin, y)
+  y += lineHeight
+  if (settings.taxEnabled) {
+    pdf.text(`HST (${(settings.taxRate * 100).toFixed(0)}%): ${formatCurrency(totals.taxAmount, settings.currency)}`, margin, y)
+    y += lineHeight
+  }
+  pdf.text(`Total: ${formatCurrency(totals.total, settings.currency)}`, margin, y)
+  y += lineHeight * 2
+
+  pdf.text('Thank you for the opportunity to quote. Please reply to approve and schedule.', margin, y, { maxWidth: 360 })
+  y += lineHeight
+  sig.forEach((line) => { pdf.text(line, margin, y); y += lineHeight })
+
+  const blob = pdf.output('blob')
+  return new File([blob], 'stump-quote.pdf', { type: 'application/pdf' })
 }
 
 const buildPhotoFiles = async (stumps: { photos?: Photo[] }[]) => {
