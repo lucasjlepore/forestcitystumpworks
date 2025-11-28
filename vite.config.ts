@@ -4,6 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig(() => ({
+  // Served at root of custom domain
+  base: '/',
   plugins: [
     react(),
     VitePWA({
@@ -16,9 +18,9 @@ export default defineConfig(() => ({
       },
       includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png'],
       manifest: {
-        name: 'StumpCalc',
-        short_name: 'StumpCalc',
-        description: 'Offline stump grinding quoting app tuned for Dosko 620-HE',
+        name: 'Forest City Stump Works',
+        short_name: 'Forest City',
+        description: 'Offline stump grinding quoting app for Forest City Stump Works',
         theme_color: '#0F172A',
         background_color: '#0F172A',
         display: 'standalone',

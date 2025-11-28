@@ -11,12 +11,13 @@ function App() {
   const { settings } = useSettings()
 
   const totals = useMemo(() => calculateQuote(job, settings), [job, settings])
+  const hasInvalidDiameters = job.stumps.some((s) => !s.diameter || s.diameter <= 0)
 
   return (
     <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-4 px-4 pb-24 pt-6">
       <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-yellow-300">StumpCalc</h1>
+          <h1 className="text-2xl font-bold text-yellow-300">Forest City Stump Works</h1>
         </div>
         <div className="flex gap-2 text-sm text-slate-200">
           <input
@@ -53,16 +54,18 @@ function App() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 text-sm text-slate-200">
+      <section id="quote-summary" className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 text-sm text-slate-200">
         <h3 className="font-semibold text-slate-50">Summary</h3>
-        <p className="text-slate-300">{job.stumps.length} stump(s) • Minimum call-out {formatCurrency(settings.minCallOutFee, settings.currency)}</p>
-        <p className="text-slate-400">Volume discount applied automatically (20% off after first).</p>
-        <p className="text-slate-400">Haul-away uses weight-based calc vs. W12A $/tonne with $15 minimum.</p>
-        <p className="text-slate-400">Access warning triggers if gate under {settings.machineWidth}" (Dosko 620-HE).</p>
-        <p className="text-slate-50 mt-2">Est. total: <span className="font-semibold text-yellow-300">{formatCurrency(totals.total, settings.currency)}</span></p>
+        <p className="text-slate-300">{job.stumps.length} stump(s) • Volume discount 20% off after first.</p>
+        {hasInvalidDiameters && <p className="text-red-400">Enter diameter for all stumps to get a valid quote.</p>}
+        <div className="mt-2 space-y-1 text-slate-200">
+          <p>Subtotal: {formatCurrency(totals.subtotal, settings.currency)}</p>
+          {settings.taxEnabled && <p>HST ({(settings.taxRate * 100).toFixed(0)}%): {formatCurrency(totals.taxAmount, settings.currency)}</p>}
+          <p className="text-slate-50">Total: <span className="font-semibold text-yellow-300">{formatCurrency(totals.total, settings.currency)}</span></p>
+        </div>
       </section>
 
-      <FooterTotals />
+      <FooterTotals disabled={hasInvalidDiameters} />
     </div>
   )
 }

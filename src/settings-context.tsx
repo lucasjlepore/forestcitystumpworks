@@ -5,21 +5,12 @@ import type { AppSettings } from './types'
 const STORAGE_KEY = 'stumpcalc_settings_v1'
 
 const defaultSettings: AppSettings = {
-  baseRatePerInch: 9,
-  minCallOutFee: 150,
+  baseRatePerInch: 5,
   taxRate: 0.13,
   taxEnabled: true,
   measureUnit: 'inches',
   currency: 'CAD',
-  companyName: 'Dosko 620-HE Ops',
-  machineWidth: 32, // inches, fits 32"+ gates
-  rootRate: 8,
-  deepGrindFee: 40,
-  haulHandlingFee: 20,
-  haulMinFee: 15,
-  landfillRatePerTonne: 75,
-  chipDensityLbsPerCubicFt: 12,
-  narrowAccessFee: 25,
+  companyName: 'Forest City Stump Works',
 }
 
 type SettingsContextValue = {

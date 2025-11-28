@@ -14,16 +14,11 @@ const newJob = (): Job => ({
   stumps: [
     {
       id: uuidv4(),
-      diameter: 18,
-      rootChasingFt: 0,
-      haulAway: false,
-      deepGrind: false,
-      accessIssue: false,
+      diameter: 0,
       locationDescription: 'Front yard',
+      photos: [],
     },
   ],
-  accessFee: 0,
-  discountPercent: 0,
 })
 
 type JobContextValue = {
@@ -70,12 +65,9 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
           ...prev.stumps,
           {
             id: uuidv4(),
-            diameter: 18,
-            rootChasingFt: 0,
-            haulAway: false,
-            deepGrind: false,
-            accessIssue: false,
+            diameter: 0,
             locationDescription: `Stump ${prev.stumps.length + 1}`,
+            photos: [],
           },
         ],
       })),
