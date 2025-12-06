@@ -8,8 +8,7 @@ Offline-ready (PWA) stump grinding quote tool hosted on GitHub Pages.
 - Per-stump inputs: diameter, count, location note, optional notes/complexity flags, up to 3 photos (kept in memory for sharing).
 - Live totals with Subtotal, HST, Total.
 - Sharing/export:
-  - Share/Copy text (formatted quote) with up to 3 compressed photos when Web Share supports files.
-  - Email quote button (formatted text; mailto can’t attach files).
+  - Share/Copy text (formatted quote) with up to 3 compressed photos when Web Share supports files or clipboard fallback otherwise.
   - Export PDF of the on-screen summary.
 - PWA enabled (install to home screen).
 
@@ -19,6 +18,7 @@ Offline-ready (PWA) stump grinding quote tool hosted on GitHub Pages.
 - Hosted at: https://lucasjlepore.github.io/forestcitystumpworks/
 
 ## Develop
+Requires Node 20.19+ (use the provided `.nvmrc` or install the matching LTS version).
 ```bash
 npm install
 npm run dev
