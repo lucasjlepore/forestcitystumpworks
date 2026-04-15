@@ -25,9 +25,6 @@ export const BookPage = () => {
         <header className="flex flex-col gap-4 rounded-[2rem] border border-slate-800 bg-slate-950/70 px-5 py-5 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur sm:px-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="space-y-3">
-              <div className="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
-                Friday-Monday booking
-              </div>
               <div className="space-y-2">
                 <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Forest City Stump Works</p>
                 <h1 className="max-w-3xl text-4xl font-black tracking-tight text-slate-50 sm:text-5xl">Book stump removal.</h1>
@@ -42,20 +39,20 @@ export const BookPage = () => {
                 Open quote tool
               </Link>
               <div className="grid gap-3 sm:grid-cols-2">
-              <a
-                href={CONTACT_PHONE_LINK}
-                className="rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-4 text-sm text-slate-200 transition hover:border-yellow-400/60 hover:bg-slate-900"
-              >
-                <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Call or text</p>
-                <p className="mt-1 text-lg font-semibold text-slate-50">{CONTACT_PHONE_DISPLAY}</p>
-              </a>
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-4 text-sm text-slate-200 transition hover:border-yellow-400/60 hover:bg-slate-900"
-              >
-                <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Email</p>
-                <p className="mt-1 break-all text-lg font-semibold text-slate-50">{CONTACT_EMAIL}</p>
-              </a>
+                <a
+                  href={CONTACT_PHONE_LINK}
+                  className="rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-4 text-sm text-slate-200 transition hover:border-yellow-400/60 hover:bg-slate-900"
+                >
+                  <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Call or text</p>
+                  <p className="mt-1 text-lg font-semibold text-slate-50">{CONTACT_PHONE_DISPLAY}</p>
+                </a>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-4 text-sm text-slate-200 transition hover:border-yellow-400/60 hover:bg-slate-900"
+                >
+                  <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Email</p>
+                  <p className="mt-1 break-all text-lg font-semibold text-slate-50">{CONTACT_EMAIL}</p>
+                </a>
               </div>
             </div>
           </div>
