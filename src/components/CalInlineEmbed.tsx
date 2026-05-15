@@ -103,9 +103,7 @@ export const CalInlineEmbed = ({ bookingWindow, onBookingSuccessful }: CalInline
     })
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
-      }
+      container.innerHTML = ''
     }
   }, [bookingWindow.calLink, inlineId, namespace, onBookingSuccessful])
 

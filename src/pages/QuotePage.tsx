@@ -35,7 +35,7 @@ const QuoteTool = () => {
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
-                to="/book"
+                to="/"
                 className="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-sm font-medium text-yellow-200 transition hover:bg-yellow-400/20"
               >
                 Open booking page

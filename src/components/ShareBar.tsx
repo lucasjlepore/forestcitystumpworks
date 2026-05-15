@@ -3,6 +3,7 @@ import { useJob } from '../job-context'
 import { useSettings } from '../settings-context'
 import { calculateQuote, formatCurrency, stumpLineTotal } from '../utils/calc'
 import type { Photo, Job, AppSettings, QuoteTotals, Stump } from '../types'
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY } from '../booking-config'
 
 const MAX_SHARED_PHOTOS = 3
 const TARGET_MAX_DIM = 800
@@ -22,8 +23,9 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
   const signatureLines = () => [
     settings.companyName,
     'Lucas Lepore',
-    '226-555-0123',
-    'forestcitystumpworks.com',
+    CONTACT_PHONE_DISPLAY,
+    CONTACT_EMAIL,
+    'https://lucasjlepore.github.io/forestcitystumpworks/',
   ]
 
   const quoteLines = () => {
@@ -41,7 +43,7 @@ export const ShareBar = ({ disabled }: { disabled: boolean }) => {
         const adjustments = describeAdjustments(s)
         const lineTotal = stumpLineTotal(s, settings)
         lines.push(
-          `Stump ${idx + 1}: ${s.diameter}\" x${s.count || 1}${s.locationDescription ? ` • ${s.locationDescription}` : ''}`,
+          `Stump ${idx + 1}: ${s.diameter}" x${s.count || 1}${s.locationDescription ? ` • ${s.locationDescription}` : ''}`,
         )
         if (adjustments) lines.push(`  Adjustments: ${adjustments}`)
         if (s.notes) lines.push(`  Notes: ${s.notes}`)
@@ -224,7 +226,7 @@ const buildQuotePdfFile = async (job: Job, settings: AppSettings, totals: QuoteT
 
     job.stumps.forEach((s, idx) => {
       pdf.text(`Stump ${idx + 1}`, margin, y)
-      pdf.text(`${s.diameter}\"`, margin + 80, y)
+      pdf.text(`${s.diameter}"`, margin + 80, y)
       pdf.text(`${s.count || 1}`, margin + 150, y)
       pdf.text(describeAdjustments(s) || '-', margin + 220, y, { maxWidth: 60 })
       pdf.text(`${s.photos?.length || 0}`, margin + 280, y)

@@ -54,12 +54,6 @@ export const BookThankYouPage = () => {
             >
               Book another window
             </Link>
-            <Link
-              to="/"
-              className="rounded-full border border-slate-800 bg-slate-900/80 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-emerald-400/40 hover:bg-slate-900"
-            >
-              Open quote tool
-            </Link>
           </div>
         </div>
       </div>

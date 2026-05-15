@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { BOOKING_WINDOWS, CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_LINK, getBookingWindow } from '../booking-config'
 import { CalInlineEmbed } from '../components/CalInlineEmbed'
 
@@ -32,12 +32,6 @@ export const BookPage = () => {
               </div>
             </div>
             <div className="flex flex-col gap-3 lg:min-w-[22rem]">
-              <Link
-                to="/"
-                className="inline-flex w-fit items-center rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-sm font-medium text-yellow-200 transition hover:bg-yellow-400/20"
-              >
-                Open quote tool
-              </Link>
               <div className="grid gap-3 sm:grid-cols-2">
                 <a
                   href={CONTACT_PHONE_LINK}

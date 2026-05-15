@@ -5,6 +5,10 @@ import type { Job, Stump } from './types'
 
 const STORAGE_KEY = 'stumpcalc_job_v1'
 
+type StoredJob = Partial<Omit<Job, 'stumps'>> & {
+  stumps?: Array<Partial<Stump> & { id?: string }>
+}
+
 const newJob = (): Job => ({
   id: uuidv4(),
   clientName: '',
@@ -25,6 +29,9 @@ const newJob = (): Job => ({
   ],
 })
 
+const finiteNumberOr = (value: unknown, fallback: number) =>
+  typeof value === 'number' && Number.isFinite(value) ? value : fallback
+
 type JobContextValue = {
   job: Job
   resetJob: () => void
@@ -43,20 +50,25 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
         try {
-          const parsed = JSON.parse(saved)
-          const stumps = Array.isArray(parsed?.stumps)
-            ? parsed.stumps.map((s: any, idx: number) => ({
-                id: s.id || uuidv4(),
-                diameter: Number.isFinite(s.diameter) ? s.diameter : 0,
-                count: Number.isFinite(s.count) && s.count > 0 ? s.count : 1,
-                locationDescription: s.locationDescription ?? `Stump ${idx + 1}`,
-                notes: s.notes ?? '',
-                isComplex: Boolean(s.isComplex),
-                isTightAccess: Boolean(s.isTightAccess),
-                photos: s.photos ?? [],
-              }))
-            : newJob().stumps
-          return { ...newJob(), ...parsed, stumps }
+          const parsed = JSON.parse(saved) as StoredJob
+          const fallbackJob = newJob()
+          const stumps: Stump[] = Array.isArray(parsed?.stumps)
+            ? parsed.stumps.map((s, idx): Stump => {
+                const count = finiteNumberOr(s.count, 1)
+
+                return {
+                  id: s.id || uuidv4(),
+                  diameter: finiteNumberOr(s.diameter, 0),
+                  count: count > 0 ? count : 1,
+                  locationDescription: s.locationDescription ?? `Stump ${idx + 1}`,
+                  notes: s.notes ?? '',
+                  isComplex: Boolean(s.isComplex),
+                  isTightAccess: Boolean(s.isTightAccess),
+                  photos: s.photos ?? [],
+                }
+              })
+            : fallbackJob.stumps
+          return { ...fallbackJob, ...parsed, stumps }
         } catch (err) {
           console.warn('Failed to parse saved job', err)
         }
@@ -72,7 +84,15 @@ export const JobProvider = ({ children }: { children: ReactNode }) => {
     try {
       const jobToPersist = {
         ...job,
-        stumps: job.stumps.map(({ photos, ...rest }) => rest), // avoid huge photos in localStorage
+        stumps: job.stumps.map((stump) => ({
+          id: stump.id,
+          diameter: stump.diameter,
+          count: stump.count,
+          locationDescription: stump.locationDescription,
+          notes: stump.notes,
+          isComplex: stump.isComplex,
+          isTightAccess: stump.isTightAccess,
+        })),
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(jobToPersist))
     } catch (err) {
